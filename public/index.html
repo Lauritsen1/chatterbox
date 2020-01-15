@@ -9,17 +9,16 @@
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="blue">
 	<meta name="apple-mobile-web-app-title" content="Chatterbox">
-
+	
 	<link rel="apple-touch-icon" href="/assets/images/catter-152x152.png">
 
 	<meta name="description" content="A simple chat app with no login">
 
-	<meta name="theme-color" content="#add8e6">
-
-	<link rel="shortcut icon" href="/assets/images/catter-128x128.png" type="image/png">
+	<meta name="theme-color" content="#ADD8E6">
 
 	<title>Chatterbox</title>
-
+	
+	<link rel="shortcut icon" href="/assets/images/catter-128x128.png" type="image/png">
 	<link rel="stylesheet" href="/assets/css/style.css">
 	<link rel="manifest" href="/manifest.json">
 </head>
@@ -31,27 +30,10 @@
 			<img src="/assets/images/catter.svg" alt="Chatterbox logo" class="siteBrand__logo">
 			Chatterbox
 		</a>
-		<button id="butInstall" aria-label="Install">Install</button>
+		<button id="butInstall" aria-label="Install" hidden><img src="/assets/images/install.svg"></button>
 	</nav>
 
-	<article class="mainChatView">
-		<!-- <p class="mainChatView__me"><span class="mainChatView__name">Brian</span> Wazzaaaaaaa!?</p>
-		<p class="mainChatView__other"><span class="mainChatView__name">Egon</span> Wazzaaaaaaa!?</p>
-		<p class="mainChatView__me"><span class="mainChatView__name">Brian</span> Wazzaaaaaaa!?</p>
-		<p class="mainChatView__other"><span class="mainChatView__name">Egon</span> Wazzaaaaaaa!?</p>
-		<p class="mainChatView__me"><span class="mainChatView__name">Brian</span> Wazzaaaaaaa!?</p>
-		<p class="mainChatView__other"><span class="mainChatView__name">Egon</span> Wazzaaaaaaa!?</p>
-		<p class="mainChatView__me"><span class="mainChatView__name">Brian</span> Wazzaaaaaaa!?</p>
-		<p class="mainChatView__other"><span class="mainChatView__name">Egon</span> Wazzaaaaaaa!?</p>
-		<p class="mainChatView__me"><span class="mainChatView__name">Brian</span> Wazzaaaaaaa!?</p>
-		<p class="mainChatView__other"><span class="mainChatView__name">Egon</span> Wazzaaaaaaa!?</p>
-		<p class="mainChatView__me"><span class="mainChatView__name">Brian</span> Wazzaaaaaaa!?</p>
-		<p class="mainChatView__other"><span class="mainChatView__name">Egon</span> Wazzaaaaaaa!?</p>
-		<p class="mainChatView__me"><span class="mainChatView__name">Brian</span> Wazzaaaaaaa!?</p>
-		<p class="mainChatView__other"><span class="mainChatView__name">Egon</span> Wazzaaaaaaa!?</p>
-		<p class="mainChatView__me"><span class="mainChatView__name">Brian</span> Wazzaaaaaaa!?</p>
-		<p class="mainChatView__other"><span class="mainChatView__name">Egon</span> Wazzaaaaaaa!?</p> -->
-	</article>
+	<article class="mainChatView"></article>
 
 	<article class="chatMessage">
 		<form class="chatMessage__form hidden">
@@ -59,7 +41,7 @@
 			<button class="chatMessage__button">Send</button>
 		</form>
 		<form class="chatMessage__form">
-			<input type="text" class="chatMessage__username" placeholder="What's your name">
+			<input type="text" class="chatMessage__username" placeholder="What's your name?">
 			<button class="chatMessage__join">Join</button>
 		</form>
 	</article>
@@ -68,18 +50,16 @@
 	<script src="/assets/js/install.js"></script>
 	<script>
 		var socket = io();
-		var chatView = document.querySelector(".mainChatView");
-		var chatForm = document.getElementsByClassName("chatMessage__form")[0];
-		var joinForm = document.getElementsByClassName("chatMessage__form")[1];
-		var sound = new Audio("/assets/media/plop.mp3");
+		var plop = new Audio("/assets/media/plop.mp3");
 		var chatButton = document.getElementsByClassName("chatMessage__button")[0];
 		var chatInput = document.getElementsByClassName("chatMessage__input")[0];
+		var chatForm = document.getElementsByClassName("chatMessage__form")[0];
+		var joinForm = document.getElementsByClassName("chatMessage__form")[1];
 		var username = document.getElementsByClassName("chatMessage__username")[0];
 		var user;
 
-		joinForm.addEventListener("submit", function (e) {
+		joinForm.addEventListener("submit", function(e) {
 			e.preventDefault();
-
 			if (username.value == "") {
 				return;
 			}
@@ -91,23 +71,22 @@
 			chatForm.classList.remove("hidden");
 		});
 
-		chatForm.addEventListener("submit", function (e) {
+		chatForm.addEventListener("submit", function(e) {
 			e.preventDefault();
-
 			if (chatInput.value == "") {
 				return;
 			}
 
-			// Emoji filter
-
-			chatInput.value = chatInput.value.replace(":)", "<img src='/assets/images/smile.png' class='emoji'>");
-			chatInput.value = chatInput.value.replace("(:", "<img src='/assets/images/smile.png' class='emoji'>");
-			chatInput.value = chatInput.value.replace(":-)", "<img src='/assets/images/smile.png' class='emoji'>");
-			chatInput.value = chatInput.value.replace("(-:", "<img src='/assets/images/smile.png' class='emoji'>");
+			// emoticon filter
+			chatInput.value = chatInput.value.replace(":)", `<img src='/assets/images/smile.png' class='emoticon'>`);
+			chatInput.value = chatInput.value.replace("(:", "<img src='/assets/images/smile.png' class='emoticon'>");
+			chatInput.value = chatInput.value.replace(":-)", "<img src='/assets/images/smile.png' class='emoticon'>");
+			chatInput.value = chatInput.value.replace("(-:", "<img src='/assets/images/smile.png' class='emoticon'>");
 
 			let time = Date.now();
 
 			socket.send({ msg: chatInput.value, timestamp: time, username: user });
+			
 			let p = document.createElement("p");
 			p.className = "mainChatView__me";
 			p.innerHTML = chatInput.value;
@@ -119,24 +98,22 @@
 			let chatView = document.getElementsByClassName("mainChatView")[0];
 			chatView.appendChild(small);
 			chatView.appendChild(p);
-
+			chatView.scrollTop = chatView.scrollHeight;
 			chatInput.value = "";
-
-			sound.play();
-
-			chatView.scrollTo(0, mainChatView.scrollHeight);
 		});
 
-		socket.on("message", function (msg) {
+		socket.on("message", function(msg) {
+			console.log(msg);
+
 			let p = document.createElement("p");
 			p.className = "mainChatView__other";
-
+			
 			let span = document.createElement("span");
 			span.className = "mainChatView__name";
 			span.innerText = msg.username;
 
 			p.appendChild(span);
-
+			
 			p.innerHTML += msg.msg;
 
 			let small = document.createElement("small");
@@ -146,30 +123,31 @@
 			let chatView = document.getElementsByClassName("mainChatView")[0];
 			chatView.appendChild(small);
 			chatView.appendChild(p);
-
-			chatView.scrollTo(0, mainChatView.scrollHeight);
+			plop.play();
+			chatView.scrollTop = chatView.scrollHeight;
 		});
 
-		socket.on("userjoin", function (msg) {
+		socket.on("userjoin", function(msg) {
+			let chatView = document.getElementsByClassName("mainChatView")[0];
 			let small = document.createElement("small");
 			small.className = "timestamp center";
 			small.innerText = `${msg} has joined the chat`;
+
 			chatView.appendChild(small);
-
-			chatView.scrollTo(0, mainChatView.scrollHeight);
+			plop.play();
+			chatView.scrollTop = chatView.scrollHeight;
 		});
-
 	</script>
 
 	<script>
-		if ('serviceWorker' in navigator) {
-			window.addEventListener('load', () => {
-				navigator.serviceWorker.register('/service-worker.js')
-					.then((reg) => {
-						console.log('Service worker registered.', reg);
+		if("serviceWorker" in navigator) {
+			window.addEventListener("load", function() {
+				navigator.serviceWorker.register("/service-worker.js")
+					.then(function(reg) {
+						console.log("Service Worker Registered", reg);
 					})
-					.catch(function (err) {
-
+					.catch(function(err) {
+						console.error(err);
 					});
 			});
 		}

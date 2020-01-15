@@ -1,5 +1,5 @@
 body {
-	background-color: hsla(210, 50%, 50%);
+	background-color: hsl(210, 50%, 50%);
 	color: hsl(0, 0%, 96%);
 	font-family: "Comic Sans MS";
 	font-size: calc(16px + (21 - 16) * (100vw - 412px) / (1920 - 412));
@@ -37,7 +37,7 @@ body {
 
 .mainChatView__me {
 	text-align: right;
-	background-color: lightblue;
+	background-color: #add8e6;
 	border-bottom-right-radius: 0;
 }
 
@@ -79,7 +79,7 @@ body {
 	border: none;
 }
 
-.emoji {
+.emoticon {
 	height: 1.4em;
 	width: auto;
 }
@@ -110,6 +110,6 @@ body {
 }
 
 #butInstall {
-	background-color: none;
+	background: none;
 	border: none;
 }
